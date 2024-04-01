@@ -48,9 +48,11 @@ fun TodoItem(
 
     var cardcolor = color
     val rcolor = Color(Random.nextLong(0xFFFFFFFF)).copy(alpha = 1F)
+    var txtColor = textColor
 
     if (todo.todoDate < LocalDate.now()) {
         cardcolor = Color.LightGray
+        txtColor = Color.DarkGray
     }
     ElevatedCard(
 
@@ -80,7 +82,7 @@ fun TodoItem(
                         text = todo.title.uppercase(),
                         fontSize = 22.sp,
                         modifier = Modifier.padding(20.dp, 20.dp, 0.dp, 0.dp),
-                        color = textColor
+                        color = txtColor
                     )
                     Text(
                         text = todo.description ?: "",
@@ -90,7 +92,7 @@ fun TodoItem(
                             .padding(20.dp, 10.dp, 0.dp, 10.dp)
                             .alpha(0.7f),
                         softWrap = true,
-                        color = textColor
+                        color = txtColor
 
                     )
                     val days = ChronoUnit.DAYS.between(LocalDate.now(), todo.todoDate)
@@ -111,7 +113,7 @@ fun TodoItem(
                     if (!dayMsg.isNullOrBlank()) {
                         Text(
                             text = dayMsg, modifier = dayMsgModifier,
-                            color = textColor
+                            color = txtColor
                         )
                     }
                 }

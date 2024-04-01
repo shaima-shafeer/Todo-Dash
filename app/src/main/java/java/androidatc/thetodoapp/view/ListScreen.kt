@@ -77,13 +77,8 @@ fun TodoListDisplay(
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(63, 66, 64),
-                    titleContentColor = textColor,
-                    navigationIconContentColor = textColor,
-                    actionIconContentColor = textColor,
-                    scrolledContainerColor = textColor
-                ),
+                colors = TopAppBarDefaults.topAppBarColors
+                    (containerColor = textColor),
                 title = {
                     Text(
                         "THINGS TO DO",
@@ -121,7 +116,7 @@ fun TodoListDisplay(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(63, 66, 64))
+                .background(textColor)
         )
         {
             Column(
@@ -253,6 +248,7 @@ fun DropDown(
         }
     }
 }
+
 @Composable
 fun DropDownMenuContent(
     status: List<String>,

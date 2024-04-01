@@ -64,6 +64,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavBackStackEntry
@@ -102,9 +103,7 @@ fun AddEditTodoScreen(navController: NavHostController, backStackEntry: NavBackS
         }
     ) { paddingValues ->
         val context = LocalContext.current
-        val viewModel: AddEditTodoViewModel = ViewModelProvider(
-            context as ViewModelStoreOwner
-        ).get(AddEditTodoViewModel::class.java)
+        val viewModel: AddEditTodoViewModel = hiltViewModel()
         viewModel.todoId = backStackEntry.arguments?.getInt("todoId") ?: -1
         //Log.d("todoId",todoId.toString())
 

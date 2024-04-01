@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import java.androidatc.thetodoapp.util.TodoItem
@@ -39,8 +40,7 @@ import java.androidatc.thetodoapp.viewmodel.TodoListViewModel
 fun TodoListScreen(navController: NavHostController) {
 
     val context = LocalContext.current
-    val viewModel: TodoListViewModel =
-        ViewModelProvider(context as ViewModelStoreOwner).get(TodoListViewModel::class.java)
+    val viewModel: TodoListViewModel = hiltViewModel()
     viewModel.show("NOT DONE")
     val todos by viewModel.todos.observeAsState(initial = emptyList())
     TodoListDisplay(todo = todos, viewModel = viewModel, navController = navController)

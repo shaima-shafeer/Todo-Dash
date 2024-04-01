@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,17 +43,21 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
@@ -63,19 +69,15 @@ import java.androidatc.thetodoapp.ui.theme.contentColor
 import java.androidatc.thetodoapp.ui.theme.textColor
 import java.androidatc.thetodoapp.util.Screen
 import java.androidatc.thetodoapp.util.TodoItem
-import java.androidatc.thetodoapp.util.quotes
 import java.androidatc.thetodoapp.viewmodel.HomeViewModel
 import java.androidatc.thetodoapp.viewmodel.TodoListViewModel
-import kotlin.random.Random
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val viewModel: HomeViewModel = ViewModelProvider(
-        context as ViewModelStoreOwner
-    ).get(HomeViewModel::class.java)
+    val viewModel: HomeViewModel = hiltViewModel()
 
     val alltodos by viewModel.alltodo.observeAsState(initial = emptyList())
     val todaytodos by viewModel.todaytodo.observeAsState(initial = emptyList())
@@ -136,8 +138,6 @@ fun HomeScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState())
         )
         {
-
-            //QuoteCard()
             IntroCard("Buddy!")
             PendingCard({ navController.navigate(Screen.AllTodoDisplay.route) }, alltodos.size)
             CategoryDisplay(navController)
@@ -198,32 +198,6 @@ fun PendingCard(onclick: () -> Unit, remainingTask: Int) {
     }
 }
 
-//Display Task to do today get todays date
-@Composable
-fun QuoteCard() {
-    val i = Random.nextInt(0, quotes.size)
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(7.dp, 15.dp), colors = CardDefaults.cardColors(contentColor)
-
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(10.dp)
-                .background(contentColor)
-        )
-        {
-            Text(
-                text = quotes[i],
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                color = textColor
-            )
-        }
-    }
-}
-
 @Composable
 fun IntroCard(name: String) {
     Card(
@@ -251,14 +225,16 @@ fun IntroCard(name: String) {
 @Composable
 fun CategoryCard(category: String, navController: NavHostController)//make onclick
 {
+    var hoverColor = remember { contentColor }
     ElevatedCard(
-        colors = CardDefaults.cardColors(contentColor),
+        colors = CardDefaults.cardColors(hoverColor),
         modifier = Modifier
             .padding(15.dp, 25.dp)
             .height(100.dp)
             .width(150.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         onClick = {
+            hoverColor= Color.LightGray
             navController.navigate("${Screen.CategoryTodoDisplay.route}/$category")
             Log.d("Category", category)
         }
@@ -274,6 +250,7 @@ fun CategoryCard(category: String, navController: NavHostController)//make oncli
 
 @Composable
 fun CategoryDisplay(navController: NavHostController) {
+
     val cat = listOf("PROFESSIONAL", "PERSONAL", "HEALTH", "OTHERS")
     LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         items(cat) { category ->
