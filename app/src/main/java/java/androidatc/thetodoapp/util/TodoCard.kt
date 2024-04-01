@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -59,7 +60,7 @@ fun TodoItem(
         modifier = Modifier
             .clickable { navController.navigate("${Screen.AddEditTodoScreen.route}/${todo.id}") }
             .padding(30.dp, 15.dp)
-            .height(160.dp)
+            .height(175.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(15.dp)),
         elevation = CardDefaults.cardElevation(30.dp),
@@ -80,16 +81,17 @@ fun TodoItem(
 
                     Text(
                         text = todo.title.uppercase(),
-                        fontSize = 22.sp,
+                        fontSize = 17.sp,
                         modifier = Modifier.padding(20.dp, 20.dp, 0.dp, 0.dp),
-                        color = txtColor
+                        color = txtColor,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = todo.description ?: "",
                         fontSize = 15.sp,
                         modifier = Modifier
                             .width(200.dp)
-                            .padding(20.dp, 10.dp, 0.dp, 10.dp)
+                            .padding(20.dp, 10.dp, 0.dp, 5.dp)
                             .alpha(0.7f),
                         softWrap = true,
                         color = txtColor
@@ -174,7 +176,7 @@ fun TodoItem(
                     modifier = Modifier
                         .width(90.dp)
                         .height(90.dp)
-                        .padding(top = 10.dp)
+                        .padding(top = 20.dp)
 
                 )
             }

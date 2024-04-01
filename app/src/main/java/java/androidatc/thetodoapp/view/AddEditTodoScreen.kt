@@ -58,15 +58,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import java.androidatc.thetodoapp.ui.theme.BGColor
@@ -146,8 +143,12 @@ fun AddEditTodoScreen(navController: NavHostController, backStackEntry: NavBackS
                 TextField(
                     value = viewModel.title,
                     onValueChange = {
-                        if (it.length < 50)
+                        if (it.length <= 30)
                             viewModel.onEvent(AddEditTodoEvent.OnTitleChange(it))
+                        else{
+                            Toast.makeText(context, "Character Limit Exceeded(30/30)", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     },
                     modifier = textfieldModifier,
                     maxLines = 1,
@@ -174,8 +175,12 @@ fun AddEditTodoScreen(navController: NavHostController, backStackEntry: NavBackS
                 TextField(
                     value = viewModel.description,
                     onValueChange = {
-                        if (it.length < 250)
+                        if (it.length <= 50)
                             viewModel.onEvent(AddEditTodoEvent.OnDescriptionChange(it))
+                        else{
+                            Toast.makeText(context, "Character Limit Exceeded(50/50)", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     },
                     modifier = textfieldModifier,
                     minLines = 2,
@@ -225,7 +230,8 @@ fun AddEditTodoScreen(navController: NavHostController, backStackEntry: NavBackS
                             if (viewModel.title.isBlank() || viewModel.description.isBlank()) {
                                 Toast.makeText(context, "Task Title is Empty.", Toast.LENGTH_SHORT)
                                     .show()
-                            } else {
+                            }
+                            else {
                                 viewModel.onEvent(AddEditTodoEvent.OnSaveTodoClick)
                                 navController.navigate(Screen.HomeScreen.route)
                             }
